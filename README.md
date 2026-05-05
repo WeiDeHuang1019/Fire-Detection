@@ -1,111 +1,192 @@
-# Fire-Detection 火焰偵測期末專案
-
-## :one:專案概述
-### 1.目標（Objective）
-
-本專案旨在開發一套**基於純影像資訊（vision-only）之火焰偵測系統**，透過傳統影像處理方法，在不依賴深度學習模型與其他感測器的前提下，實現對影片中火焰的自動辨識與區域標記功能。
-
-系統將運行於低功耗嵌入式平台（如 Raspberry Pi 4 或同等級設備），以達成低成本、可部署之火焰監測解決方案。
+# Fire Detection System — Requirement Specification
 
 ---
 
-### 2.限制（Constrain）
-
-本研究明確聚焦於以下範疇：
-
-#### (2.1)單一資料來源（Single Modality）
-
-* 僅使用 **RGB 影像或影片**
-* 不使用：
-
-  * 溫度感測器（thermal sensor）
-  * 紅外線（IR）
-  * 煙霧感測器
-  * 多模態融合（multi-modal fusion）
-
-> 系統僅依賴「畫面本身」進行判斷
+# 1️⃣ 需求（Requirements）
 
 ---
 
-#### (2.2) 非深度學習方法（Non-Deep Learning）
+## :large_blue_diamond: 1.1 功能需求（Functional Requirements）
 
-* 不使用：
+### :small_blue_diamond:1.1.1 火焰偵測（Fire Detection）
 
-  * CNN / Transformer
-  * 預訓練模型
-* 採用：
+* 系統需能判斷輸入影像/影片中是否存在火焰
+* 輸出為：
 
-  * 傳統影像處理與規則式判斷
+  * Fire / Non-Fire（二元判斷）
 
-* 降低計算成本
-* 提升可解釋性
-* 符合嵌入式系統需求
 
----
+### :small_blue_diamond:1.1.2 火焰定位（Fire Localization）
 
-#### (2.3) 邊緣裝置部署（Edge Deployment）
+* 系統需能在影像中標示火焰區域
+* 輸出形式：
 
-系統需具備以下特性：
+  * Bounding Box（矩形框）
 
-* 可於 Raspberry Pi 4 即時運行
-* 不依賴雲端運算
-* 可獨立完成火焰判斷與標記
 
----
+### :small_blue_diamond:1.1.3 即時影像處理（Real-time Processing）
 
-### 3.功能（Functional Objectives）
+* 系統需支援連續影像串流（video stream）
+* 可即時或近即時顯示偵測結果
 
-系統需具備以下基本能力：
 
-#### (3.1) 火焰存在判斷
+### :small_blue_diamond:1.1.4 誤判控制（False Positive Reduction）
 
-* 判斷畫面中是否存在火焰
+* 系統需具備降低誤判能力
+* 需能避免誤判以下情境：
 
----
-
-#### (3.2) 火焰區域定位
-
-* 將火焰區域以 bounding box 方式標示於影像上
-
----
-
-#### (3.3) 即時處理能力
-
-* 可處理連續影片流（video stream）
-* 達到基本即時反應（real-time or near real-time）
-
----
-
-#### (3.4) 誤判控制能力
-
-在僅使用影像資訊的限制下，盡可能降低以下誤判：
-
-* 燈光（黃色 / 橘色光源）
-* 夕陽或強光
-* 反光物體
-
+  * 黃色 / 橘色光源
+  * 夕陽 / 強光
+  * 反光物體
 
 
 ---
 
-### 4.預期成果（Expected Outcomes）
+## :large_blue_diamond: 1.2 效能需求（Performance Requirements）
 
-本專案預期完成：
+### :small_blue_diamond:1.2.1 即時性（Real-time Constraint）
 
-* 一套可於嵌入式平台執行的火焰偵測系統
-* 可對影片中的火焰進行：
+* 需於嵌入式平台上達到：
 
-  * 偵測（detection）
-  * 定位（localization）
-* 在純影像條件下達到合理準確度與穩定性
+  * ≥ 10–20 FPS@640x480（目標值）
+  * 或具備可接受之 near real-time 表現
 
-:arrow_down_small:預期結果示意圖(非實際成果)
-<img width="1222" height="569" alt="image" src="https://github.com/user-attachments/assets/1e4a99ad-3e76-4861-806d-248d36f741db" />
+### :small_blue_diamond:1.2.2 計算資源限制（Resource Constraint）
+
+* 可運行於 Raspberry Pi 4
+* 僅使用 CPU（不依賴 GPU）
+
+
+### :small_blue_diamond:1.2.3 系統穩定性（Stability）
+
+* 在連續影像輸入下穩定運行
+* 不產生頻繁錯誤或崩潰
+
+
+### :small_blue_diamond:1.2.4 準確性（Accuracy）
+
+* 在純影像條件下：
+
+  * 能穩定偵測火焰
+  * 誤判率需可控（不需 SOTA，但需合理）
 
 
 ---
-## :two:專案分析
-### 1.Breakdown
+
+## :large_blue_diamond: 1.3 介面需求（Interface Requirements）
+
+### :small_blue_diamond:1.3.1 輸入介面（Input Interface）
+
+* 支援：
+
+  * USB Camera（V4L2 / OpenCV）
+  * CSI Camera（libcamera / Picamera2）
+
+* 輸入格式：
+
+  * RGB Frame（影像幀）
+
+
+### :small_blue_diamond:1.3.2 輸出介面（Output Interface）
+
+* 即時顯示：
+
+  * HDMI 螢幕顯示（含 bounding box）
+
+* 可選輸出：
+
+  * 影片儲存（Video recording）
+  * 圖片輸出（snapshot）
+
+
+### :small_blue_diamond:1.3.3 系統運行環境（System Environment）
+
+* 嵌入式平台：
+
+  * Raspberry Pi 4 或同級以下設備
+
+* 軟體環境：
+
+  * Python + OpenCV
+
+
+---
+
+## :large_blue_diamond: 1.4 驗證（Verification）
+
+
+### :small_blue_diamond:1.4.1 測試資料（Test Data）
+
+#### 正樣本（Fire cases）
+
+* 含火焰影片：
+
+  * 室內火焰（蠟燭、瓦斯爐）
+  * 戶外火焰（營火、燃燒物）
+
+
+#### 負樣本（Non-fire cases）
+
+* 無火焰但易誤判：
+
+  * 黃光燈
+  * 日落
+  * 車燈
+  * 反光物體
+
+
+### :small_blue_diamond:1.4.2 期待輸入 / 輸出（Expected I/O）
+
+#### Input
+
+* Video stream / 影像序列
+
+#### Output
+
+* Fire / Non-Fire 判斷
+* Bounding box（若有火焰）
+<img width="1655" height="612" alt="image" src="https://github.com/user-attachments/assets/d4d94f85-515f-40c7-b915-60976c3edcbf" />
+
+
+### :small_blue_diamond:1.4.3 測試方法（Testing Method）
+
+#### 演算法正確性（Algorithm Accuracy）
+
+1. 正樣本:
+   * Fire / Non-Fire 判斷   -> Fire ✔️
+   * Bounding box           -> 正確框出火焰區域 ✔️
+3. 負樣本:
+   * Fire / Non-Fire 判斷   -> Non-Fire ✔️
+   * Bounding box           -> 無框選 ✔️
+
+#### 硬體效能（Hardware Performanced）
+
+測試條件:
+```Text
+平台：Raspberry Pi 4
+解析度：320×240 / 640×480
+輸入來源：USB Camera 或 CSI Camera
+輸出方式：HDMI display / video recording
+```
+
+| 效能項目         | 測量方式                         |
+| ------------ | ---------------------------- |
+| FPS          | 計算1秒內最高能處理幀數                       |
+| Latency      | 從 frame input 到 output 顯示的延遲 |
+| CPU Usage    | Raspberry Pi CPU 使用率         |
+| Memory Usage | RAM 使用量                      |
+| Stability    | 連續執行 10–30 分鐘是否正常            |
+
+
+---
+
+# 2️⃣ Breakdown
 <img width="4404" height="1764" alt="image" src="https://github.com/user-attachments/assets/b02d1452-90e1-4b09-810a-919105eb6bea" />
 
-該階層圖拆解了 *Video in/process/out* 的組成，其中也提及了可能使用到的硬體元件，以及主要的coding任務。
+---
+
+# 3️⃣ 設計（略過）
+
+---
+
+
