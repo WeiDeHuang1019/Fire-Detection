@@ -181,11 +181,13 @@
 ---
 
 # 2️⃣ Breakdown
-<img width="4404" height="1764" alt="image" src="https://github.com/user-attachments/assets/b02d1452-90e1-4b09-810a-919105eb6bea" />
+<img width="5444" height="2248" alt="image" src="https://github.com/user-attachments/assets/af7c1eb8-8263-42e6-8113-1bcfc93129e6" />
 
 ---
 
-# 3️⃣ 設計（略過）
+# 3️⃣ 設計
+### 架構圖
+<img width="5844" height="1044" alt="image" src="https://github.com/user-attachments/assets/c59da506-ce9a-4551-9707-0f07bcbcdf11" />
 
 ---
 
