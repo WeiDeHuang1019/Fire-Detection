@@ -249,8 +249,28 @@
 ---
 
 # 3️⃣ 設計
-### 架構圖
+## 架構圖
 <img width="5848" height="1048" alt="image" src="https://github.com/user-attachments/assets/5f34b018-f2a1-4083-bf05-5516b1f62b94" />
 
-
+## What/Why/How
+### HSV
+#### What
+#### Why
+#### How
+### Morpholog
+#### What
+#### Why
+#### How
+### Farneback
+#### What
+#### Why
+#### How
+### mask decision
+#### What
+#### Why
+#### How
+### Bounding Box Drawing
+#### What
+#### Why
+#### How
 ---
