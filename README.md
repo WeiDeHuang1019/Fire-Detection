@@ -253,24 +253,54 @@
 <img width="5848" height="1048" alt="image" src="https://github.com/user-attachments/assets/5f34b018-f2a1-4083-bf05-5516b1f62b94" />
 
 ## What/Why/How
-### HSV
-#### What
-#### Why
-#### How
-### Morpholog
-#### What
-#### Why
-#### How
-### Farneback
-#### What
-#### Why
-#### How
-### mask decision
-#### What
-#### Why
-#### How
-### Bounding Box Drawing
-#### What
-#### Why
-#### How
+### `cv2.VideoCapture`
+>#### What
+>使用 OpenCV 從 USB camera 讀取即時影像 frame。
+>#### Why
+>Raspberry Pi 需要先取得 camera 的每一幀影像，後面的 HSV、形態學、光流、畫框都需要以這些 frame 作為輸入。
+>#### How
+>用 cv2.VideoCapture(0) 開啟 USB camera，然後在 while 迴圈中用 ret, frame = cap.read() 不斷讀取影像。
+### `HSV`
+>#### What
+>將 BGR 影像轉成 HSV 色彩空間，並根據顏色範圍產生初步 mask。
+>#### Why
+>如果是火焰偵測，火焰通常具有紅、橘、黃等顏色特徵，用 HSV 比直接用 RGB 更容易設定顏色門檻。HSV 可以把「色相 H」、「飽和度 S」、「亮度 V」分開處理。
+>#### How
+>使用 cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)，再用 cv2.inRange() 擷取符合火焰顏色範圍的區域。
+### `Morphology`
+>#### What
+>對 HSV 產生的 binary mask 做形態學處理，例如 erosion、dilation、opening、closing。
+>#### Why
+>HSV mask 通常會有雜訊、小白點、破碎區域。形態學可以去除小雜訊、填補破洞、讓偵測區域更完整。
+>#### How
+>使用 cv2.morphologyEx() 搭配 kernel，例如 opening 去雜訊，closing 補洞。
+### `Farneback`
+>#### What
+>使用 Farneback dense optical flow 計算前後兩幀之間每個 pixel 的移動向量。
+>#### Why
+>火焰和煙霧除了顏色特徵之外，還有動態特徵。火焰會閃爍、跳動；煙霧會緩慢飄動、擴散。光流可以幫助判斷某個區域是不是真的有動態變化，而不是單純顏色相似的靜態物體。
+>#### How
+>將前一幀和當前幀轉成 grayscale，使用 cv2.calcOpticalFlowFarneback() 計算 dense optical flow，再取 magnitude 作為運動強度。
+### `mask decision`
+>#### What
+>將 HSV/morphology mask 和 Farneback motion mask 做融合判斷，決定最終偵測區域。
+>#### Why
+>單靠 HSV 容易誤判顏色相似物；單靠光流容易受到 camera shake、背景移動、行人移動影響。因此需要融合顏色與動態資訊。
+>#### How
+>可以使用 AND、OR、加權分數、區域面積門檻、連續幀穩定判斷等方法。
+### `Bounding Box Drawing`
+>#### What
+>根據 final mask 找出連通區域或輪廓，並在原始影像上畫出偵測框。
+>#### Why
+>只輸出 binary mask 不直觀。畫 bounding box 可以讓展示者和觀眾直接看到系統判斷哪裡有火焰或煙霧。
+>#### How
+>使用 cv2.findContours() 找輪廓，再用 cv2.boundingRect() 取得矩形座標，最後用 cv2.rectangle() 畫框。
+## `cv2.imshow`
+>### What
+>將處理後的影像顯示出來。
+>### Why
+>需要讓使用者即時看到 camera 畫面、mask 結果、bounding box 偵測結果。
+>### How
+>使用 cv2.imshow() 顯示 frame，Raspberry Pi 透過 HDMI 接到 monitor，畫面就會出現在螢幕上。
+
 ---
