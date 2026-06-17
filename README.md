@@ -304,3 +304,10 @@
 >使用 cv2.imshow() 顯示 frame，Raspberry Pi 透過 HDMI 接到 monitor，畫面就會出現在螢幕上。
 
 ---
+
+# Result
+
+
+https://github.com/user-attachments/assets/6c10a5b0-fd9b-4661-9dca-7cb5035030c1
+
+
