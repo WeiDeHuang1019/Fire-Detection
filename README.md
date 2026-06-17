@@ -244,13 +244,24 @@
 ---
 
 # 2️⃣ Breakdown
-<img width="5444" height="2248" alt="image" src="https://github.com/user-attachments/assets/af7c1eb8-8263-42e6-8113-1bcfc93129e6" />
+### Top
+<img width="2480" height="1724" alt="image" src="https://github.com/user-attachments/assets/8728f551-ea01-4566-9f68-31d19f073971" />
+
+### FireSmoke Detection Part
+<img width="5364" height="1248" alt="image" src="https://github.com/user-attachments/assets/c0787867-58f1-4d35-bf72-29a75d4cb7dd" />
+
 
 ---
 
 # 3️⃣ 設計
-## 架構圖
-<img width="5848" height="1048" alt="image" src="https://github.com/user-attachments/assets/5f34b018-f2a1-4083-bf05-5516b1f62b94" />
+## 流程圖
+### Top
+<img width="4048" height="728" alt="image" src="https://github.com/user-attachments/assets/d2e7ce9a-8c02-4663-889b-1f1f2cc23a7a" />
+
+
+### FireSmoke Detection Part
+<img width="3768" height="2004" alt="image" src="https://github.com/user-attachments/assets/df289948-f8e8-4834-842c-892d0e37f708" />
+
 
 ## What/Why/How
 ### `cv2.VideoCapture`
